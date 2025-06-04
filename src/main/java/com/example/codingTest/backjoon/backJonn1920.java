@@ -2,83 +2,43 @@ package com.example.codingTest.backjoon;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.util.*;
-import java.util.function.BiFunction;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashSet;
 
-/**
- 5
- 4 1 5 2 3
- 5
- 1 3 7 9 5
-
- 1
- 1
- 0
- 0
- 1
- */
 public class backJonn1920 {
     public static void main(String[] args) throws IOException {
-        String lineChange = "\n";
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("5");
-        stringBuilder.append(lineChange);
-        stringBuilder.append("4 1 5 2 3");
-        stringBuilder.append(lineChange);
-        stringBuilder.append("5");
-        stringBuilder.append(lineChange);
-        stringBuilder.append("1 3 7 9 5");
+        String lc = "\n";
 
-        BufferedReader br = new BufferedReader(new StringReader(stringBuilder.toString()));
+        ArrayList<String> ex = new ArrayList<>();
 
-        //BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        ex.add("5" + lc);
+        ex.add("4 1 5 2 3" + lc);
+        ex.add("5" + lc);
+        ex.add("1 3 7 9 5");
 
-        int targetCnt = Integer.valueOf(br.readLine());
+        String sample = ex.stream()
+                .reduce("", (s1, s2) -> s1 + s2);
 
-        int[] targets = Arrays.stream(br.readLine().split(" "))
-                .mapToInt(Integer::valueOf)
-                .sorted()
-                .toArray();
+        BufferedReader br = new BufferedReader(new StringReader(sample));
 
-        int valuesCnt = Integer.valueOf(br.readLine());
-        String[] values = br.readLine().split(" ");
+        br.readLine();
+        String[] card = br.readLine().split(" ");
 
-        for (int i = 0; i < valuesCnt; i++) {
-            int minIdx = 0, midIdx = 0;
-            int maxIdx = values.length - 1;
-            int currentVal = Integer.valueOf(values[i]);
+        HashSet<Integer> cardSet = new HashSet<>();
+        for (String c : card) {
+            cardSet.add(Integer.parseInt(c));
+        }
 
-            if (currentVal < targets[0] || targets[targets.length -1] < currentVal) {
-                System.out.println("0");
-                continue;
+        int cnt = Integer.parseInt(br.readLine());
+        String[] hands = br.readLine().split(" ");
+
+        for (int i = 0; i < cnt; i++) {
+            if (cardSet.contains(Integer.parseInt(hands[i]))) {
+                System.out.println(1);
+            } else {
+                System.out.println(0);
             }
-
-            while (true) {
-                midIdx = Math.round((float) (minIdx + maxIdx) / 2);
-
-                if (midIdx == minIdx || midIdx == maxIdx) {
-                    int lastMinVal = Integer.compare(currentVal, targets[minIdx]);
-                    int lastMaxVal = Integer.compare(currentVal, targets[maxIdx]);
-
-                    if (lastMinVal == 0 || lastMaxVal == 0) System.out.println("1");
-                    else System.out.println("0");
-                    break;
-                }
-
-                int result = Integer.compare(currentVal, targets[midIdx]);
-
-                if (result == 0) {
-                    System.out.println("1");
-                    break;
-                }
-
-                if (result == -1) maxIdx = midIdx - 1;
-                if (result == 1) minIdx = midIdx + 1;
-            }
-
         }
     }
 }
